@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水物性计算器 v1.1</title>
+    <style>
+        body { font-family: "宋体", "SimSun", serif; margin: 0; padding: 10px; background-color: #c0c0c0; font-size: 12px; }
+        .container { background: #f0f0f0; padding: 10px; border: 2px outset #c0c0c0; max-width: 800px; margin: 0 auto; }
+        h1 { color: #000080; text-align: center; font-size: 18px; margin: 5px 0; text-shadow: 1px 1px 2px #808080; }
+        .tabs { display: flex; margin-bottom: 10px; border-bottom: 2px solid #808080; }
+        .tab { padding: 5px 15px; cursor: pointer; background: #d4d0c8; border: 1px solid #808080; border-bottom: none; margin-right: 2px; font-size: 12px; }
+        .tab.active { background: #ffffff; font-weight: bold; }
+        .tab-content { display: none; background: #ffffff; border: 1px solid #808080; padding: 10px; }
+        .tab-content.active { display: block; }
+        label { display: block; margin-bottom: 2px; font-weight: bold; color: #000080; }
+        select, input { width: 200px; padding: 2px; border: 1px solid #808080; font-size: 12px; font-family: "宋体", "SimSun", serif; }
+        button { background: #d4d0c8; color: #000; padding: 5px 15px; border: 2px outset #d4d0c8; cursor: pointer; font-size: 12px; font-family: "宋体", "SimSun", serif; font-weight: bold; }
+        button:active { border: 2px inset #d4d0c8; }
+        button:disabled { color: #808080; cursor: not-allowed; }
+        .result { margin-top: 10px; padding: 10px; background: #d4d0c8; border: 1px solid #808080; font-size: 11px; }
+        .error { background: #ffd4d4; border: 1px solid #ff0000; color: #ff0000; }
+        .properties-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 5px; margin-top: 8px; }
+        .property { background: #ffffff; padding: 5px; border: 1px solid #808080; font-size: 11px; }
+        .property-name { font-weight: bold; color: #000080; margin-bottom: 2px; }
+        .property-value { color: #000; font-family: "Courier New", monospace; word-wrap: break-word; }
+        .header { background: linear-gradient(to bottom, #000080, #4169e1); color: white; padding: 5px; text-align: center; margin-bottom: 10px; border: 1px solid #808080; }
+        .status-bar { background: #d4d0c8; border: 1px solid #808080; padding: 3px 5px; margin-top: 10px; font-size: 11px; color: #000080; }
+        .input-row { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+        .input-row label { min-width: 80px; margin-bottom: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>水物性计算器 v1.1</h1>
+            <div>基于 IAPWS-IF97 标准</div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event, 'calculate')">物性计算</div>
+            <div class="tab" onclick="switchTab(event, 'export')">数据导出</div>
+        </div>
+        
+        <div id="calculate" class="tab-content active">
+            <form id="calculateForm">
+                <div class="input-row">
+                    <label>输入参数1:</label>
+                    <select id="input1_type" name="input1_type">
+                        <option value="temperature">温度 (°C)</option>
+                        <option value="pressure">压力 (MPa)</option>
+                        <option value="enthalpy">焓 (kJ/kg)</option>
+                        <option value="dryness">热力干度</option>
+                    </select>
+                    <input type="number" id="input1_value" name="input1_value" step="any" required>
+                </div>
+                
+                <div class="input-row">
+                    <label>输入参数2:</label>
+                    <select id="input2_type" name="input2_type">
+                        <option value="pressure">压力 (MPa)</option>
+                        <option value="temperature">温度 (°C)</option>
+                        <option value="enthalpy">焓 (kJ/kg)</option>
+                        <option value="dryness">热力干度</option>
+                    </select>
+                    <input type="number" id="input2_value" name="input2_value" step="any" required>
+                </div>
+                
+                <button type="submit" id="calculateButton">计算物性</button>
+            </form>
+            
+            <div id="calculateResult"></div>
+        </div>
+        
+        <div id="export" class="tab-content">
+            <p>数据导出功能尚未在后端实现。</p>
+        </div>
+        
+        <div class="status-bar" id="statusBar">
+            就绪 | 等待输入...
+        </div>
+    </div>
+
+    <script>
+        // =================================================================
+        // !! 重要配置 !!
+        // 请将下面的地址替换为您的真实函数URL
+        // =================================================================
+        const API_BASE_URL = 'http://water-func-iqweupkgxi.cn-shanghai.fcapp.run'; 
+        // 例如: 'https://water-func-iqweupkgxi.cn-shanghai.fcapp.run'
+        // =================================================================
+
+        const statusBar = document.getElementById('statusBar');
+        const calculateButton = document.getElementById('calculateButton');
+
+        function updateStatus(message, isError = false) {
+            statusBar.textContent = message;
+            statusBar.style.color = isError ? '#ff0000' : '#000080';
+        }
+        
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        document.getElementById('calculateForm').addEventListener('submit', function(e) {
+            // 1. 阻止表单的默认提交行为
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('calculateResult');
+            resultDiv.innerHTML = ''; // 清空上次结果
+            updateStatus('正在计算...');
+            calculateButton.disabled = true; // 禁用按钮防止重复点击
+
+            // 2. 收集表单数据
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            // 3. 使用 Fetch API 发送异步 POST 请求
+            fetch(`${API_BASE_URL}/calculate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data) // 将JS对象转为JSON字符串
+            })
+            .then(response => {
+                // 4. 处理HTTP响应
+                if (!response.ok) { // 如果状态码不是 2xx (如 404, 500)
+                    // 尝试解析错误体，如果失败则给一个通用错误
+                    return response.json().then(err => { 
+                        throw new Error(err.error || `服务器错误 (状态: ${response.status})`) 
+                    });
+                }
+                return response.json(); // 解析成功的响应体
+            })
+            .then(responseData => {
+                // 5. 处理从响应体中解析出的JSON数据
+                // API返回格式: [status_code, headers, body_string]
+                let data;
+                if (Array.isArray(responseData)) {
+                    // 如果是数组格式，解析第三个元素(body字符串)
+                    const bodyString = responseData[2];
+                    data = JSON.parse(bodyString);
+                } else {
+                    // 如果是直接的对象格式
+                    data = responseData;
+                }
+                
+                if (data.success) {
+                    const props = data.properties;
+                    // 动态生成结果HTML，而不是写死属性
+                    let html = '<div class="result"><h3>水物性参数</h3><div class="properties-grid">';
+                    
+                    // 属性映射：英文名 -> 中文名、单位、转换函数
+                    const propertyMap = {
+                        temperature: { name: '温度', unit: '°C', convert: (v) => v - 273.15 },
+                        pressure: { name: '压力', unit: 'MPa', convert: (v) => v / 1000000 },
+                        enthalpy: { name: '焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
+                        entropy: { name: '熵', unit: 'kJ/(kg·K)', convert: (v) => v / 1000 },
+                        density: { name: '密度', unit: 'kg/m³', convert: (v) => v },
+                        quality: { name: '热力干度', unit: '', convert: (v) => v },
+                        specific_heat: { name: '比热容', unit: 'kJ/(kg·K)', convert: (v) => v / 1000 },
+                        thermal_conductivity: { name: '导热系数', unit: 'W/(m·K)', convert: (v) => v },
+                        viscosity: { name: '动力粘度', unit: 'Pa·s', convert: (v) => v },
+                        surface_tension: { name: '表面张力', unit: 'N/m', convert: (v) => v },
+                        speed_of_sound: { name: '声速', unit: 'm/s', convert: (v) => v },
+                        // 饱和数据
+                        saturation_data: {
+                            tsat: { name: '饱和温度', unit: '°C', convert: (v) => v - 273.15 },
+                            psat: { name: '饱和压力', unit: 'MPa', convert: (v) => v / 1000000 },
+                            hf: { name: '饱和液体焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
+                            hg: { name: '饱和蒸汽焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
+                            hfg: { name: '汽化潜热', unit: 'kJ/kg', convert: (v) => v / 1000 }
+                        }
+                    };
+                    
+                    // 处理主要属性
+                    for (const propKey in props) {
+                        if (Object.prototype.hasOwnProperty.call(props, propKey) && propKey !== 'saturation_data') {
+                            const value = props[propKey];
+                            const propInfo = propertyMap[propKey];
+                            
+                            if (propInfo) {
+                                const convertedValue = propInfo.convert(value);
+                                const displayValue = typeof convertedValue === 'number' ? 
+                                    convertedValue.toPrecision(8) : convertedValue;
+                                const unitText = propInfo.unit ? ` ${propInfo.unit}` : '';
+                                
+                                html += `<div class="property">
+                                            <div class="property-name">${propInfo.name}</div>
+                                            <div class="property-value">${displayValue}${unitText}</div>
+                                         </div>`;
+                            }
+                        }
+                    }
+                    
+                    // 处理饱和数据
+                    if (props.saturation_data) {
+                        html += '<div class="property" style="grid-column: 1 / -1;"><div class="property-name">饱和数据</div></div>';
+                        for (const satKey in props.saturation_data) {
+                            if (Object.prototype.hasOwnProperty.call(props.saturation_data, satKey)) {
+                                const value = props.saturation_data[satKey];
+                                const satInfo = propertyMap.saturation_data[satKey];
+                                
+                                if (satInfo) {
+                                    const convertedValue = satInfo.convert(value);
+                                    const displayValue = typeof convertedValue === 'number' ? 
+                                        convertedValue.toPrecision(8) : convertedValue;
+                                    const unitText = satInfo.unit ? ` ${satInfo.unit}` : '';
+                                    
+                                    html += `<div class="property">
+                                                <div class="property-name">${satInfo.name}</div>
+                                                <div class="property-value">${displayValue}${unitText}</div>
+                                             </div>`;
+                                }
+                            }
+                        }
+                    }
+                    
+                    html += '</div></div>';
+                    resultDiv.innerHTML = html;
+                    updateStatus('计算完成');
+                } else {
+                    // 如果 success: false
+                    throw new Error(data.error || '计算失败');
+                }
+            })
+            .catch(error => {
+                // 6. 统一捕获并显示任何环节发生的错误
+                resultDiv.innerHTML = `<div class="result error"><h3>错误</h3><p>${error.message}</p></div>`;
+                updateStatus(`错误: ${error.message}`, true);
+            })
+            .finally(() => {
+                // 7. 无论成功或失败，最后都重新启用按钮
+                calculateButton.disabled = false;
+            });
+        });
+        
+    </script>
+</body>
+</html>
