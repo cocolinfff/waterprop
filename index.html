@@ -73,7 +73,55 @@
         </div>
         
         <div id="export" class="tab-content">
-            <p>数据导出功能尚未在后端实现。</p>
+            <h3>数据导出</h3>
+            <p style="color: #666; margin-bottom: 15px;">生成二维参数表格数据</p>
+            
+            <div style="margin-bottom: 15px;">
+                <label>参数1：</label>
+                <select id="param1">
+                    <option value="temperature">温度 (°C)</option>
+                    <option value="pressure">压力 (MPa)</option>
+                    <option value="enthalpy">焓 (kJ/kg)</option>
+                    <option value="dryness">热力干度</option>
+                </select>
+                <label>步数：</label>
+                <input type="number" id="steps1" min="1" max="100" value="10" required onchange="toggleRangeInputs(1)">
+                <span id="range1">
+                    <label>起始值：</label>
+                    <input type="number" id="start1" step="any" required>
+                    <label>结束值：</label>
+                    <input type="number" id="end1" step="any" required>
+                </span>
+                <span id="single1" style="display: none;">
+                    <label>值：</label>
+                    <input type="number" id="singleValue1" step="any" required>
+                </span>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label>参数2：</label>
+                <select id="param2">
+                    <option value="pressure" selected>压力 (MPa)</option>
+                    <option value="temperature">温度 (°C)</option>
+                    <option value="enthalpy">焓 (kJ/kg)</option>
+                    <option value="dryness">热力干度</option>
+                </select>
+                <label>步数：</label>
+                <input type="number" id="steps2" min="1" max="100" value="1" required onchange="toggleRangeInputs(2)">
+                <span id="range2">
+                    <label>起始值：</label>
+                    <input type="number" id="start2" step="any" required>
+                    <label>结束值：</label>
+                    <input type="number" id="end2" step="any" required>
+                </span>
+                <span id="single2" style="display: none;">
+                    <label>值：</label>
+                    <input type="number" id="singleValue2" step="any" required>
+                </span>
+            </div>
+            
+            <button id="exportButton" onclick="exportData()">导出CSV</button>
+            <div id="exportResult"></div>
         </div>
         
         <div class="status-bar" id="statusBar">
@@ -92,6 +140,7 @@
 
         const statusBar = document.getElementById('statusBar');
         const calculateButton = document.getElementById('calculateButton');
+        let lastCalculationData = null; // 存储最后一次计算的数据
 
         function updateStatus(message, isError = false) {
             statusBar.textContent = message;
@@ -223,6 +272,13 @@
                     html += '</div></div>';
                     resultDiv.innerHTML = html;
                     updateStatus('计算完成');
+                    
+                    // 保存计算结果用于导出
+                    lastCalculationData = {
+                        inputs: data,
+                        properties: props,
+                        timestamp: new Date().toISOString()
+                    };
                 } else {
                     // 如果 success: false
                     throw new Error(data.error || '计算失败');
@@ -230,7 +286,16 @@
             })
             .catch(error => {
                 // 6. 统一捕获并显示任何环节发生的错误
-                resultDiv.innerHTML = `<div class="result error"><h3>错误</h3><p>${error.message}</p></div>`;
+                let errorMessage = error.message;
+                
+                // 如果是CORS或网络错误，提供更友好的提示
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage = '无法连接到服务器。请检查：<br>1. API服务是否正常运行<br>2. 网络连接是否正常<br>3. 是否存在CORS跨域问题';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage = '跨域请求被拒绝。请联系服务器管理员配置CORS策略。';
+                }
+                
+                resultDiv.innerHTML = `<div class="result error"><h3>错误</h3><p>${errorMessage}</p></div>`;
                 updateStatus(`错误: ${error.message}`, true);
             })
             .finally(() => {
@@ -239,6 +304,131 @@
             });
         });
         
+        // 切换范围输入显示
+        function toggleRangeInputs(paramNum) {
+            const steps = document.getElementById(`steps${paramNum}`).value;
+            const rangeSpan = document.getElementById(`range${paramNum}`);
+            const singleSpan = document.getElementById(`single${paramNum}`);
+            
+            if (parseInt(steps) === 1) {
+                rangeSpan.style.display = 'none';
+                singleSpan.style.display = 'inline';
+            } else {
+                rangeSpan.style.display = 'inline';
+                singleSpan.style.display = 'none';
+            }
+        }
+        
+        // 页面加载时初始化显示状态
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleRangeInputs(1);
+            toggleRangeInputs(2);
+        });
+        
+        // 导出数据函数
+        async function exportData() {
+            const exportResult = document.getElementById('exportResult');
+            const exportButton = document.getElementById('exportButton');
+            
+            // 收集表单数据
+            const param1 = document.getElementById('param1').value;
+            const steps1 = document.getElementById('steps1').value;
+            const param2 = document.getElementById('param2').value;
+            const steps2 = document.getElementById('steps2').value;
+            
+            // 根据步数决定是否需要起始值和结束值
+            let start1, end1, start2, end2;
+            
+            if (parseInt(steps1) === 1) {
+                start1 = document.getElementById('singleValue1').value;
+                if (!start1) {
+                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数1的值</p></div>`;
+                    return;
+                }
+                end1 = start1; // 步数为1时，结束值等于起始值
+            } else {
+                start1 = document.getElementById('start1').value;
+                end1 = document.getElementById('end1').value;
+                if (!start1 || !end1) {
+                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数1的起始值和结束值</p></div>`;
+                    return;
+                }
+            }
+            
+            if (parseInt(steps2) === 1) {
+                start2 = document.getElementById('singleValue2').value;
+                if (!start2) {
+                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数2的值</p></div>`;
+                    return;
+                }
+                end2 = start2; // 步数为1时，结束值等于起始值
+            } else {
+                start2 = document.getElementById('start2').value;
+                end2 = document.getElementById('end2').value;
+                if (!start2 || !end2) {
+                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数2的起始值和结束值</p></div>`;
+                    return;
+                }
+            }
+            
+            exportButton.disabled = true;
+            updateStatus('正在生成CSV文件...');
+            
+            try {
+                const requestData = {
+                    param1: param1,
+                    start1: parseFloat(start1),
+                    end1: parseFloat(end1),
+                    steps1: parseInt(steps1),
+                    param2: param2,
+                    start2: parseFloat(start2),
+                    end2: parseFloat(end2),
+                    steps2: parseInt(steps2)
+                };
+                
+                const response = await fetch(`${API_BASE_URL}/export_csv`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `服务器错误 (状态: ${response.status})`);
+                }
+                
+                // 处理CSV文件下载
+                const contentDisposition = response.headers.get('Content-Disposition');
+                const filename = contentDisposition ? 
+                    contentDisposition.split('filename=')[1].replace(/"/g, '') : 
+                    'water_properties.csv';
+                
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                // 计算总数据量
+                const totalPoints = parseInt(steps1) * parseInt(steps2);
+                exportResult.innerHTML = `<div class="result"><h3>导出成功</h3><p>已生成 ${totalPoints} 个数据点的CSV文件</p></div>`;
+                updateStatus('导出完成');
+                
+            } catch (error) {
+                exportResult.innerHTML = `<div class="result error"><h3>导出失败</h3><p>${error.message}</p></div>`;
+                updateStatus(`导出失败: ${error.message}`, true);
+            } finally {
+                exportButton.disabled = false;
+            }
+        }
+        
+          
     </script>
 </body>
 </html>
