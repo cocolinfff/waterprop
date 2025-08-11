@@ -1,0 +1,253 @@
+{
+  "materials": [
+    {
+      "id": "uo2_leu",
+      "name": "二氧化铀 (UO₂, 4.5% LEU)",
+      "type": "Fuel",
+      "density_g_cm3": 10.97,
+      "melting_point_k": 3138,
+      "thermal_properties": {
+        "thermal_conductivity_w_mk": {
+          "A": 4.52,
+          "B": 2.46e-4,
+          "C": -3.50e-7
+        },
+        "specific_heat_j_kgk": {
+          "A": 235.0,
+          "B": 0.161,
+          "C": -1.87e-5
+        }
+      },
+      "isotopes": [
+        {
+          "name": "U-235",
+          "atomic_mass": 235.044,
+          "abundance_percent": 4.5,
+          "number_density_atoms_cm3_e24": 0.00096,
+          "cross_sections_barns": {
+            "absorption": [678.5, 584.2, 502.1, 428.9, 363.7, 305.2, 253.8, 208.4, 168.9, 134.2],
+            "fission": [577.8, 531.5, 486.2, 441.8, 398.3, 355.7, 314.2, 273.6, 234.1, 195.7],
+            "scattering": [14.2, 13.8, 13.4, 13.0, 12.6, 12.2, 11.8, 11.4, 11.0, 10.6]
+          }
+        },
+        {
+          "name": "U-238",
+          "atomic_mass": 238.051,
+          "abundance_percent": 95.5,
+          "number_density_atoms_cm3_e24": 0.02043,
+          "cross_sections_barns": {
+            "absorption": [2.68, 3.45, 4.32, 5.21, 6.18, 7.25, 8.42, 9.71, 11.15, 12.78],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [8.87, 8.65, 8.43, 8.21, 7.99, 7.77, 7.55, 7.33, 7.11, 6.89]
+          }
+        },
+        {
+          "name": "O-16",
+          "atomic_mass": 15.999,
+          "abundance_percent": 66.67,
+          "number_density_atoms_cm3_e24": 0.04278,
+          "cross_sections_barns": {
+            "absorption": [0.00019, 0.00018, 0.00017, 0.00016, 0.00015, 0.00014, 0.00013, 0.00012, 0.00011, 0.00010],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [3.76, 3.74, 3.72, 3.70, 3.68, 3.66, 3.64, 3.62, 3.60, 3.58]
+          }
+        }
+      ]
+    },
+    {
+      "id": "mox_fuel",
+      "name": "混合氧化物燃料 (MOX)",
+      "type": "Fuel",
+      "density_g_cm3": 11.15,
+      "melting_point_k": 3070,
+      "thermal_properties": {
+        "thermal_conductivity_w_mk": {
+          "A": 3.89,
+          "B": 1.84e-4,
+          "C": -2.98e-7
+        },
+        "specific_heat_j_kgk": {
+          "A": 220.0,
+          "B": 0.145,
+          "C": -1.65e-5
+        }
+      },
+      "isotopes": [
+        {
+          "name": "U-238",
+          "atomic_mass": 238.051,
+          "abundance_percent": 88.5,
+          "number_density_atoms_cm3_e24": 0.01895,
+          "cross_sections_barns": {
+            "absorption": [2.68, 3.45, 4.32, 5.21, 6.18, 7.25, 8.42, 9.71, 11.15, 12.78],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [8.87, 8.65, 8.43, 8.21, 7.99, 7.77, 7.55, 7.33, 7.11, 6.89]
+          }
+        },
+        {
+          "name": "Pu-239",
+          "atomic_mass": 239.052,
+          "abundance_percent": 8.5,
+          "number_density_atoms_cm3_e24": 0.00182,
+          "cross_sections_barns": {
+            "absorption": [1017.3, 871.2, 745.8, 638.1, 545.9, 466.3, 398.2, 340.1, 290.2, 247.8],
+            "fission": [747.9, 742.5, 735.8, 727.9, 718.8, 708.4, 696.9, 684.1, 670.2, 655.1],
+            "scattering": [7.85, 7.68, 7.51, 7.34, 7.17, 7.00, 6.83, 6.66, 6.49, 6.32]
+          }
+        },
+        {
+          "name": "Pu-240",
+          "atomic_mass": 240.054,
+          "abundance_percent": 2.5,
+          "number_density_atoms_cm3_e24": 0.00053,
+          "cross_sections_barns": {
+            "absorption": [289.6, 345.2, 412.8, 495.1, 594.6, 714.8, 859.4, 1032.7, 1239.9, 1486.1],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [7.91, 7.74, 7.57, 7.40, 7.23, 7.06, 6.89, 6.72, 6.55, 6.38]
+          }
+        },
+        {
+          "name": "O-16",
+          "atomic_mass": 15.999,
+          "abundance_percent": 66.67,
+          "number_density_atoms_cm3_e24": 0.04459,
+          "cross_sections_barns": {
+            "absorption": [0.00019, 0.00018, 0.00017, 0.00016, 0.00015, 0.00014, 0.00013, 0.00012, 0.00011, 0.00010],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [3.76, 3.74, 3.72, 3.70, 3.68, 3.66, 3.64, 3.62, 3.60, 3.58]
+          }
+        }
+      ]
+    },
+    {
+      "id": "zircaloy4",
+      "name": "锆-4合金 (Zircaloy-4)",
+      "type": "Cladding",
+      "density_g_cm3": 6.55,
+      "melting_point_k": 2128,
+      "thermal_properties": {
+        "thermal_conductivity_w_mk": {
+          "A": 7.51,
+          "B": 2.09e-2,
+          "C": -1.45e-5
+        },
+        "specific_heat_j_kgk": {
+          "A": 252.54,
+          "B": 0.11474,
+          "C": 0.0
+        }
+      },
+      "isotopes": [
+        {
+          "name": "Zr",
+          "atomic_mass": 91.224,
+          "abundance_percent": 97.85,
+          "number_density_atoms_cm3_e24": 0.04295,
+          "cross_sections_barns": {
+            "absorption": [0.185, 0.198, 0.213, 0.230, 0.249, 0.270, 0.293, 0.318, 0.346, 0.376],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [6.44, 6.40, 6.36, 6.32, 6.28, 6.24, 6.20, 6.16, 6.12, 6.08]
+          }
+        },
+        {
+          "name": "Sn",
+          "atomic_mass": 118.710,
+          "abundance_percent": 1.45,
+          "number_density_atoms_cm3_e24": 0.00053,
+          "cross_sections_barns": {
+            "absorption": [0.625, 0.687, 0.756, 0.832, 0.916, 1.008, 1.109, 1.220, 1.342, 1.476],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [4.87, 4.82, 4.77, 4.72, 4.67, 4.62, 4.57, 4.52, 4.47, 4.42]
+          }
+        },
+        {
+          "name": "Fe",
+          "atomic_mass": 55.845,
+          "abundance_percent": 0.21,
+          "number_density_atoms_cm3_e24": 0.00016,
+          "cross_sections_barns": {
+            "absorption": [2.56, 2.78, 3.02, 3.28, 3.56, 3.86, 4.19, 4.54, 4.92, 5.33],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [11.62, 11.48, 11.34, 11.20, 11.06, 10.92, 10.78, 10.64, 10.50, 10.36]
+          }
+        },
+        {
+          "name": "Cr",
+          "atomic_mass": 51.996,
+          "abundance_percent": 0.105,
+          "number_density_atoms_cm3_e24": 0.00009,
+          "cross_sections_barns": {
+            "absorption": [3.05, 3.34, 3.66, 4.01, 4.39, 4.81, 5.26, 5.76, 6.30, 6.89],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [3.84, 3.79, 3.74, 3.69, 3.64, 3.59, 3.54, 3.49, 3.44, 3.39]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ss316",
+      "name": "316不锈钢 (SS-316)",
+      "type": "Cladding",
+      "density_g_cm3": 8.00,
+      "melting_point_k": 1728,
+      "thermal_properties": {
+        "thermal_conductivity_w_mk": {
+          "A": 9.248,
+          "B": 0.01571,
+          "C": 0.0
+        },
+        "specific_heat_j_kgk": {
+          "A": 462.0,
+          "B": 0.134,
+          "C": 0.0
+        }
+      },
+      "isotopes": [
+        {
+          "name": "Fe",
+          "atomic_mass": 55.845,
+          "abundance_percent": 68.5,
+          "number_density_atoms_cm3_e24": 0.05894,
+          "cross_sections_barns": {
+            "absorption": [2.56, 2.78, 3.02, 3.28, 3.56, 3.86, 4.19, 4.54, 4.92, 5.33],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [11.62, 11.48, 11.34, 11.20, 11.06, 10.92, 10.78, 10.64, 10.50, 10.36]
+          }
+        },
+        {
+          "name": "Cr",
+          "atomic_mass": 51.996,
+          "abundance_percent": 17.0,
+          "number_density_atoms_cm3_e24": 0.02619,
+          "cross_sections_barns": {
+            "absorption": [3.05, 3.34, 3.66, 4.01, 4.39, 4.81, 5.26, 5.76, 6.30, 6.89],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [3.84, 3.79, 3.74, 3.69, 3.64, 3.59, 3.54, 3.49, 3.44, 3.39]
+          }
+        },
+        {
+          "name": "Ni",
+          "atomic_mass": 58.693,
+          "abundance_percent": 12.0,
+          "number_density_atoms_cm3_e24": 0.01639,
+          "cross_sections_barns": {
+            "absorption": [4.49, 4.89, 5.33, 5.81, 6.33, 6.90, 7.52, 8.19, 8.92, 9.71],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [17.5, 17.3, 17.1, 16.9, 16.7, 16.5, 16.3, 16.1, 15.9, 15.7]
+          }
+        },
+        {
+          "name": "Mo",
+          "atomic_mass": 95.960,
+          "abundance_percent": 2.5,
+          "number_density_atoms_cm3_e24": 0.00209,
+          "cross_sections_barns": {
+            "absorption": [2.48, 2.71, 2.96, 3.23, 3.52, 3.84, 4.19, 4.56, 4.97, 5.41],
+            "fission": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            "scattering": [6.04, 5.98, 5.92, 5.86, 5.80, 5.74, 5.68, 5.62, 5.56, 5.50]
+          }
+        }
+      ]
+    }
+  ]
+}

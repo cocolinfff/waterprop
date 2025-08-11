@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核材料物性查询 v1.0</title>
+    <style>
+        body{font-family:"宋体",serif;margin:0;padding:10px;background:#c0c0c0;font-size:12px}
+        .container{background:#f0f0f0;padding:10px;border:2px outset #c0c0c0;max-width:1200px;margin:0 auto}
+        h1{color:#000080;text-align:center;font-size:18px;margin:5px 0;text-shadow:1px 1px 2px #808080}
+        h2{color:#000080;font-size:16px;margin:15px 0 10px 0;border-bottom:1px solid #808080;padding-bottom:5px}
+        h3{color:#000080;font-size:14px;margin:10px 0 5px 0}
+        h4{color:#000080;font-size:12px;margin:8px 0 5px 0}
+        .header{background:linear-gradient(to bottom,#000080,#4169e1);color:#fff;padding:5px;text-align:center;margin-bottom:10px;border:1px solid #808080}
+        .control-panel{background:#d4d0c8;border:1px solid #808080;padding:15px;margin-bottom:15px}
+        label{display:block;margin-bottom:5px;font-weight:bold;color:#000080}
+        select{width:300px;padding:5px;border:1px solid #808080;font-size:12px;font-family:"宋体",serif;background:#fff}
+        .results-container{background:#fff;border:1px solid #808080;padding:15px;min-height:100px}
+        .material-display{font-size:12px}
+        table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px}
+        th,td{border:1px solid #808080;padding:6px;text-align:left}
+        th{background:#d4d0c8;font-weight:bold;color:#000080}
+        tr:nth-child(even){background:#f8f8f8}
+        .status-bar{background:#d4d0c8;border:1px solid #808080;padding:3px 5px;margin-top:10px;font-size:11px;color:#000080;text-align:center}
+        .back-link{display:inline-block;margin-bottom:10px;color:#000080;text-decoration:none;font-weight:bold;border:1px solid #808080;padding:5px 10px;background:#d4d0c8}
+        .back-link:hover{background:#e0e0e0}
+        .data-source{background:#ffffcc;border:1px solid #cccc00;padding:10px;margin-top:15px;font-size:11px;color:#666}
+        .isotope-section{margin-bottom:20px;padding:15px;border:1px solid #808080;background:#f8f8f8}
+        .cross-section-table{font-size:10px}
+        .cross-section-table th,.cross-section-table td{padding:3px 4px;text-align:center}
+        .monospace{font-family:"Courier New",monospace}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>核材料物性查询系统</h1>
+            <div>基于 ENDF/B-VIII.0 数据库</div>
+        </div>
+        
+        <a href="index.html" class="back-link">← 返回主页</a>
+
+        <div class="control-panel">
+            <label for="material-selector">选择核材料:</label>
+            <select id="material-selector">
+                <option value="">正在加载材料数据...</option>
+            </select>
+        </div>
+
+        <div id="results-container" class="results-container">
+            <p style="color:#666;text-align:center;margin:20px 0;">请从上方下拉菜单中选择一种核材料以查看其详细物性数据。</p>
+        </div>
+
+        <div class="data-source">
+            <h3 style="margin-top:0;color:#000080;">数据来源与参考文献</h3>
+            <ul style="margin:5px 0;padding-left:20px;line-height:1.4">
+                <li><strong>ENDF/B-VIII.0 数据库</strong> - 美国评价核数据文件：<a href="https://www.nndc.bnl.gov/endf/" target="_blank">https://www.nndc.bnl.gov/endf/</a></li>
+                <li><strong>IAEA 核材料热物性数据</strong> - 国际原子能机构材料数据库：<a href="https://www.iaea.org/publications/7884/thermophysical-properties-of-materials-for-nuclear-engineering" target="_blank">IAEA-TECDOC-1496</a></li>
+                <li><strong>OECD-NEA 核科学数据</strong> - 经合组织核能署：<a href="https://www.oecd-nea.org/science/" target="_blank">https://www.oecd-nea.org/science/</a></li>
+                <li><strong>Todreas & Kazimi</strong> - "Nuclear Systems I: Thermal Hydraulic Fundamentals" (MIT Press, 2021)</li>
+                <li><strong>Lamarsh & Baratta</strong> - "Introduction to Nuclear Engineering" (4th Edition, Pearson, 2018)</li>
+            </ul>
+            <p style="margin:5px 0;font-style:italic;">注：本系统中的十群截面数据基于典型轻水反应堆能谱进行群平均计算得出，仅供教学和初步设计参考。</p>
+        </div>
+
+        <div class="status-bar">
+            核材料物性查询系统 v1.0 | 数据更新时间: 2025年8月 | 适用于核工程课程设计
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

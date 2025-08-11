@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>单位换算 - 水物性计算器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{font-family:"宋体",serif;margin:0;padding:10px;background:#c0c0c0;font-size:12px}
+        .container{background:#f0f0f0;padding:10px;border:2px outset #c0c0c0;max-width:800px;margin:0 auto}
+        h1{color:#000080;text-align:center;font-size:18px;margin:5px 0;text-shadow:1px 1px 2px #808080}
+        .header{background:linear-gradient(to bottom,#000080,#4169e1);color:#fff;padding:5px;text-align:center;margin-bottom:10px;border:1px solid #808080}
+        .unit-group{margin-bottom:20px;padding:15px;border:1px solid #808080;background:#f8f8f8}
+        .unit-group label{font-weight:bold;color:#000080;margin-bottom:10px;display:block}
+        .unit-converter{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+        .unit-select{width:200px;padding:3px;border:1px solid #808080;font-size:11px}
+        .unit-input{width:120px;padding:3px;border:1px solid #808080;font-size:11px}
+        .unit-converter span{font-weight:bold;color:#000080;font-size:14px}
+        .unit-note{font-size:10px;color:#666;margin:5px 0 0 0;line-height:1.3}
+        h3{color:#000080;border-bottom:1px solid #808080;padding-bottom:3px;margin-top:20px}
+        h2{color:#000080;text-align:center;margin-bottom:15px}
+        .back-link{display:inline-block;margin-bottom:10px;color:#000080;text-decoration:none;font-weight:bold;border:1px solid #808080;padding:5px 10px;background:#d4d0c8}
+        .back-link:hover{background:#e0e0e0}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>单位换算</h1>
+        </div>
+        <div><a href="index.html" class="back-link">← 返回主页</a></div>
+        <h3>1. 辐射与剂量</h3>
+        <div class="unit-group">
+            <label>放射性活度</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="Ci" data-factor="3.7e10">居里 (Ci)</option>
+                    <option value="Bq" data-factor="1">贝克勒尔 (Bq)</option>
+                    <option value="mCi" data-factor="3.7e7">毫居里 (mCi)</option>
+                    <option value="μCi" data-factor="3.7e4">微居里 (μCi)</option>
+                    <option value="GBq" data-factor="1e9">吉贝克 (GBq)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="Bq" data-factor="1">贝克勒尔 (Bq)</option>
+                    <option value="Ci" data-factor="3.7e10">居里 (Ci)</option>
+                    <option value="mCi" data-factor="3.7e7">毫居里 (mCi)</option>
+                    <option value="μCi" data-factor="3.7e4">微居里 (μCi)</option>
+                    <option value="GBq" data-factor="1e9">吉贝克 (GBq)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>居里</strong>最初定义为1克镭-226的放射性活度。1 Ci = 3.7 × 10¹⁰ Bq</p>
+        </div>
+        <div class="unit-group">
+            <label>吸收剂量</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="rad" data-factor="0.01">拉德 (rad)</option>
+                    <option value="Gy" data-factor="1">戈瑞 (Gy)</option>
+                    <option value="mGy" data-factor="0.001">毫戈瑞 (mGy)</option>
+                    <option value="cGy" data-factor="0.01">厘戈瑞 (cGy)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="Gy" data-factor="1">戈瑞 (Gy)</option>
+                    <option value="rad" data-factor="0.01">拉德 (rad)</option>
+                    <option value="mGy" data-factor="0.001">毫戈瑞 (mGy)</option>
+                    <option value="cGy" data-factor="0.01">厘戈瑞 (cGy)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>拉德</strong>代表每千克物质吸收0.01焦耳的能量。1 Gy = 100 rad</p>
+        </div>
+        <div class="unit-group">
+            <label>当量剂量</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="rem" data-factor="0.01">雷姆 (rem)</option>
+                    <option value="Sv" data-factor="1">希沃特 (Sv)</option>
+                    <option value="mSv" data-factor="0.001">毫希沃特 (mSv)</option>
+                    <option value="mrem" data-factor="0.00001">毫雷姆 (mrem)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="Sv" data-factor="1">希沃特 (Sv)</option>
+                    <option value="rem" data-factor="0.01">雷姆 (rem)</option>
+                    <option value="mSv" data-factor="0.001">毫希沃特 (mSv)</option>
+                    <option value="mrem" data-factor="0.00001">毫雷姆 (mrem)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>雷姆</strong>考虑了不同类型辐射对生物组织的伤害权重。1 Sv = 100 rem</p>
+        </div>
+        <h3>2. 反应截面</h3>
+        <div class="unit-group">
+            <label>微观截面</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="barn" data-factor="1e-28">靶恩 (barn)</option>
+                    <option value="m2" data-factor="1">平方米 (m²)</option>
+                    <option value="cm2" data-factor="1e-4">平方厘米 (cm²)</option>
+                    <option value="mbarn" data-factor="1e-31">毫靶恩 (mbarn)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="m2" data-factor="1">平方米 (m²)</option>
+                    <option value="barn" data-factor="1e-28">靶恩 (barn)</option>
+                    <option value="cm2" data-factor="1e-4">平方厘米 (cm²)</option>
+                    <option value="mbarn" data-factor="1e-31">毫靶恩 (mbarn)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>靶恩</strong>描述原子核与中子等粒子发生反应的"有效面积"。1 barn = 10⁻²⁸ m²</p>
+        </div>
+        <h3>3. 热工水力与传热</h3>
+        <div class="unit-group">
+            <label>功率/热流率</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="BTU/hr" data-factor="0.293071">英热单位/小时 (BTU/hr)</option>
+                    <option value="W" data-factor="1">瓦特 (W)</option>
+                    <option value="kW" data-factor="1000">千瓦 (kW)</option>
+                    <option value="MW" data-factor="1e6">兆瓦 (MW)</option>
+                    <option value="BTU/s" data-factor="1055.06">英热单位/秒 (BTU/s)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="W" data-factor="1">瓦特 (W)</option>
+                    <option value="BTU/hr" data-factor="0.293071">英热单位/小时 (BTU/hr)</option>
+                    <option value="kW" data-factor="1000">千瓦 (kW)</option>
+                    <option value="MW" data-factor="1e6">兆瓦 (MW)</option>
+                    <option value="BTU/s" data-factor="1055.06">英热单位/秒 (BTU/s)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>BTU</strong>是将1磅水的温度升高1华氏度所需的热量。1 W ≈ 3.412 BTU/hr</p>
+        </div>
+        <div class="unit-group">
+            <label>压力</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="psi" data-factor="6895">磅/平方英寸 (psi)</option>
+                    <option value="Pa" data-factor="1">帕斯卡 (Pa)</option>
+                    <option value="kPa" data-factor="1000">千帕 (kPa)</option>
+                    <option value="MPa" data-factor="1e6">兆帕 (MPa)</option>
+                    <option value="bar" data-factor="1e5">巴 (bar)</option>
+                    <option value="atm" data-factor="101325">标准大气压 (atm)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="Pa" data-factor="1">帕斯卡 (Pa)</option>
+                    <option value="psi" data-factor="6895">磅/平方英寸 (psi)</option>
+                    <option value="kPa" data-factor="1000">千帕 (kPa)</option>
+                    <option value="MPa" data-factor="1e6">兆帕 (MPa)</option>
+                    <option value="bar" data-factor="1e5">巴 (bar)</option>
+                    <option value="atm" data-factor="101325">标准大气压 (atm)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note">反应堆一回路压力在美国设计的核电站中常以<strong>psi</strong>为单位。1 psi ≈ 6895 Pa</p>
+        </div>
+        <div class="unit-group">
+            <label>流量</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="GPM" data-factor="6.309e-5">加仑/分钟 (GPM)</option>
+                    <option value="m3/s" data-factor="1">立方米/秒 (m³/s)</option>
+                    <option value="L/s" data-factor="0.001">升/秒 (L/s)</option>
+                    <option value="m3/h" data-factor="0.000278">立方米/小时 (m³/h)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="m3/s" data-factor="1">立方米/秒 (m³/s)</option>
+                    <option value="GPM" data-factor="6.309e-5">加仑/分钟 (GPM)</option>
+                    <option value="L/s" data-factor="0.001">升/秒 (L/s)</option>
+                    <option value="m3/h" data-factor="0.000278">立方米/小时 (m³/h)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note">冷却剂流量在美国技术规格中常用<strong>GPM</strong>。1 GPM ≈ 6.309 × 10⁻⁵ m³/s</p>
+        </div>
+        <h3>4. 燃料燃耗</h3>
+        <div class="unit-group">
+            <label>燃耗深度</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="MWd/tU" data-factor="8.64e7">兆瓦日/公吨铀 (MWd/tU)</option>
+                    <option value="J/kg" data-factor="1">焦耳/千克 (J/kg)</option>
+                    <option value="GWd/tU" data-factor="8.64e10">吉瓦日/公吨铀 (GWd/tU)</option>
+                    <option value="MJ/kg" data-factor="1e6">兆焦/千克 (MJ/kg)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="J/kg" data-factor="1">焦耳/千克 (J/kg)</option>
+                    <option value="MWd/tU" data-factor="8.64e7">兆瓦日/公吨铀 (MWd/tU)</option>
+                    <option value="GWd/tU" data-factor="8.64e10">吉瓦日/公吨铀 (GWd/tU)</option>
+                    <option value="MJ/kg" data-factor="1e6">兆焦/千克 (MJ/kg)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note">衡量从单位质量核燃料中提取能量总量的行业标准单位。1 MWd/tU = 8.64 × 10⁷ J/kg</p>
+        </div>
+        <h3>5. 其他工程单位</h3>
+        <div class="unit-group">
+            <label>长度/尺寸</label>
+            <div class="unit-converter">
+                <select class="unit-select">
+                    <option value="ft" data-factor="0.3048">英尺 (ft)</option>
+                    <option value="in" data-factor="0.0254">英寸 (in)</option>
+                    <option value="mil" data-factor="0.0000254">密耳 (mil)</option>
+                    <option value="m" data-factor="1">米 (m)</option>
+                    <option value="cm" data-factor="0.01">厘米 (cm)</option>
+                    <option value="mm" data-factor="0.001">毫米 (mm)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                <span>↔</span>
+                <select class="unit-select">
+                    <option value="m" data-factor="1">米 (m)</option>
+                    <option value="ft" data-factor="0.3048">英尺 (ft)</option>
+                    <option value="in" data-factor="0.0254">英寸 (in)</option>
+                    <option value="mil" data-factor="0.0000254">密耳 (mil)</option>
+                    <option value="cm" data-factor="0.01">厘米 (cm)</option>
+                    <option value="mm" data-factor="0.001">毫米 (mm)</option>
+                </select>
+                <input type="number" class="unit-input" step="any" placeholder="输入数值">
+            </div>
+            <p class="unit-note"><strong>Mil</strong>即千分之一英寸，常用于描述包壳厚度。1 mil = 0.0254 mm</p>
+        </div>
+    </div>
+    <script>
+    function setupUnitConverters(){document.querySelectorAll('.unit-converter').forEach(converter=>{const inputs=converter.querySelectorAll('.unit-input'),selects=converter.querySelectorAll('.unit-select');inputs.forEach((input,index)=>{input.addEventListener('input',()=>{if(input.value!==''){const fromSelect=selects[index],toSelect=selects[1-index],otherInput=inputs[1-index],fromFactor=parseFloat(fromSelect.selectedOptions[0].dataset.factor),toFactor=parseFloat(toSelect.selectedOptions[0].dataset.factor),inputValue=parseFloat(input.value);if(!isNaN(inputValue)){const baseValue=inputValue*fromFactor,convertedValue=baseValue/toFactor;otherInput.value=convertedValue.toPrecision(6)}}else inputs[1-index].value=''})});selects.forEach((select,index)=>{select.addEventListener('change',()=>{const activeInput=inputs[index];if(activeInput.value!=='')activeInput.dispatchEvent(new Event('input'))})})})}
+    document.addEventListener('DOMContentLoaded',setupUnitConverters);
+    </script>
+</body>
+</html>
