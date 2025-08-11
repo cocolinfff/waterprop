@@ -3,432 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>水物性计算器 v1.1</title>
+    <title>水物性计算器 v2.1</title>
     <style>
-        body { font-family: "宋体", "SimSun", serif; margin: 0; padding: 10px; background-color: #c0c0c0; font-size: 12px; }
-        .container { background: #f0f0f0; padding: 10px; border: 2px outset #c0c0c0; max-width: 800px; margin: 0 auto; }
-        h1 { color: #000080; text-align: center; font-size: 18px; margin: 5px 0; text-shadow: 1px 1px 2px #808080; }
-        .tabs { display: flex; margin-bottom: 10px; border-bottom: 2px solid #808080; }
-        .tab { padding: 5px 15px; cursor: pointer; background: #d4d0c8; border: 1px solid #808080; border-bottom: none; margin-right: 2px; font-size: 12px; }
-        .tab.active { background: #ffffff; font-weight: bold; }
-        .tab-content { display: none; background: #ffffff; border: 1px solid #808080; padding: 10px; }
-        .tab-content.active { display: block; }
-        label { display: block; margin-bottom: 2px; font-weight: bold; color: #000080; }
-        select, input { width: 200px; padding: 2px; border: 1px solid #808080; font-size: 12px; font-family: "宋体", "SimSun", serif; }
-        button { background: #d4d0c8; color: #000; padding: 5px 15px; border: 2px outset #d4d0c8; cursor: pointer; font-size: 12px; font-family: "宋体", "SimSun", serif; font-weight: bold; }
-        button:active { border: 2px inset #d4d0c8; }
-        button:disabled { color: #808080; cursor: not-allowed; }
-        .result { margin-top: 10px; padding: 10px; background: #d4d0c8; border: 1px solid #808080; font-size: 11px; }
-        .error { background: #ffd4d4; border: 1px solid #ff0000; color: #ff0000; }
-        .properties-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 5px; margin-top: 8px; }
-        .property { background: #ffffff; padding: 5px; border: 1px solid #808080; font-size: 11px; }
-        .property-name { font-weight: bold; color: #000080; margin-bottom: 2px; }
-        .property-value { color: #000; font-family: "Courier New", monospace; word-wrap: break-word; }
-        .header { background: linear-gradient(to bottom, #000080, #4169e1); color: white; padding: 5px; text-align: center; margin-bottom: 10px; border: 1px solid #808080; }
-        .status-bar { background: #d4d0c8; border: 1px solid #808080; padding: 3px 5px; margin-top: 10px; font-size: 11px; color: #000080; }
-        .input-row { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
-        .input-row label { min-width: 80px; margin-bottom: 0; }
+        body{font-family:"宋体",serif;margin:0;padding:10px;background:#c0c0c0;font-size:12px}
+        .container{background:#f0f0f0;padding:10px;border:2px outset #c0c0c0;max-width:800px;margin:0 auto}
+        h1{color:#000080;text-align:center;font-size:18px;margin:5px 0;text-shadow:1px 1px 2px #808080}
+        .tabs{display:flex;margin-bottom:10px;border-bottom:2px solid #808080}
+        .tab{padding:5px 15px;cursor:pointer;background:#d4d0c8;border:1px solid #808080;border-bottom:none;margin-right:2px;font-size:12px}
+        .tab.active{background:#fff;font-weight:bold}
+        .tab-content{display:none;background:#fff;border:1px solid #808080;padding:10px}
+        .tab-content.active{display:block}
+        label{display:block;margin-bottom:2px;font-weight:bold;color:#000080}
+        select,input{width:200px;padding:2px;border:1px solid #808080;font-size:12px;font-family:"宋体",serif}
+        button{background:#d4d0c8;color:#000;padding:5px 15px;border:2px outset #d4d0c8;cursor:pointer;font-size:12px;font-family:"宋体",serif;font-weight:bold}
+        button:active{border:2px inset #d4d0c8}
+        button:disabled{color:#808080;cursor:not-allowed}
+        .result{margin-top:10px;padding:10px;background:#d4d0c8;border:1px solid #808080;font-size:11px}
+        .error{background:#ffd4d4;border:1px solid #f00;color:#f00}
+        .properties-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:5px;margin-top:8px}
+        .property{background:#fff;padding:5px;border:1px solid #808080;font-size:11px}
+        .property-name{font-weight:bold;color:#000080;margin-bottom:2px}
+        .property-value{color:#000;font-family:"Courier New",monospace;word-wrap:break-word}
+        .header{background:linear-gradient(to bottom,#000080,#4169e1);color:#fff;padding:5px;text-align:center;margin-bottom:10px;border:1px solid #808080}
+        .status-bar{background:#d4d0c8;border:1px solid #808080;padding:3px 5px;margin-top:10px;font-size:11px;color:#000080}
+        .input-row{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+        .input-row label{min-width:80px;margin-bottom:0}
+        .unit-group{margin-bottom:20px;padding:15px;border:1px solid #808080;background:#f8f8f8}
+        .unit-group label{font-weight:bold;color:#000080;margin-bottom:10px;display:block}
+        .unit-converter{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+        .unit-select{width:200px;padding:3px;border:1px solid #808080;font-size:11px}
+        .unit-input{width:120px;padding:3px;border:1px solid #808080;font-size:11px}
+        .unit-converter span{font-weight:bold;color:#000080;font-size:14px}
+        .unit-note{font-size:10px;color:#666;margin:5px 0 0 0;line-height:1.3}
+        #unit h3{color:#000080;border-bottom:1px solid #808080;padding-bottom:3px;margin-top:20px}
+        #unit h2{color:#000080;text-align:center;margin-bottom:15px}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>水物性计算器 v1.1</h1>
+            <h1>物性计算器</h1>
             <div>基于 IAPWS-IF97 标准</div>
         </div>
         
         <div class="tabs">
-            <div class="tab active" onclick="switchTab(event, 'calculate')">物性计算</div>
-            <div class="tab" onclick="switchTab(event, 'export')">数据导出</div>
+            <div class="tab active" onclick="switchTab(event,'calculate')">物性计算</div>
+            <div class="tab" onclick="switchTab(event,'export')">数据导出</div>
+            <div class="tab" onclick="switchTab(event,'unit')">单位换算</div>
         </div>
         
         <div id="calculate" class="tab-content active">
             <form id="calculateForm">
                 <div class="input-row">
                     <label>输入参数1:</label>
-                    <select id="input1_type" name="input1_type">
-                        <option value="temperature">温度 (°C)</option>
-                        <option value="pressure">压力 (MPa)</option>
-                        <option value="enthalpy">焓 (kJ/kg)</option>
-                        <option value="dryness">热力干度</option>
+                    <select id="input1_type" name="input1_type" tabindex="1">
+                        <option value="T">温度 (°C)</option>
+                        <option value="P">压力 (MPa)</option>
+                        <option value="H">焓 (kJ/kg)</option>
+                        <option value="Q">热力干度</option>
                     </select>
-                    <input type="number" id="input1_value" name="input1_value" step="any" required>
+                    <input type="number" id="input1_value" name="input1_value" step="any" required tabindex="2">
                 </div>
-                
                 <div class="input-row">
                     <label>输入参数2:</label>
-                    <select id="input2_type" name="input2_type">
-                        <option value="pressure">压力 (MPa)</option>
-                        <option value="temperature">温度 (°C)</option>
-                        <option value="enthalpy">焓 (kJ/kg)</option>
-                        <option value="dryness">热力干度</option>
+                    <select id="input2_type" name="input2_type" tabindex="4">
+                        <option value="P">压力 (MPa)</option>
+                        <option value="T">温度 (°C)</option>
+                        <option value="H">焓 (kJ/kg)</option>
+                        <option value="Q">热力干度</option>
                     </select>
-                    <input type="number" id="input2_value" name="input2_value" step="any" required>
+                    <input type="number" id="input2_value" name="input2_value" step="any" required tabindex="3">
                 </div>
-                
-                <button type="submit" id="calculateButton">计算物性</button>
+                <button type="submit" id="calculateButton" tabindex="5">计算物性</button>
             </form>
-            
             <div id="calculateResult"></div>
         </div>
         
         <div id="export" class="tab-content">
             <h3>数据导出</h3>
-            <p style="color: #666; margin-bottom: 15px;">生成二维参数表格数据</p>
-            
-            <div style="margin-bottom: 15px;">
+            <p style="color:#666;margin-bottom:15px">生成二维参数表格数据</p>
+            <div style="margin-bottom:15px">
                 <label>参数1：</label>
                 <select id="param1">
-                    <option value="temperature">温度 (°C)</option>
-                    <option value="pressure">压力 (MPa)</option>
-                    <option value="enthalpy">焓 (kJ/kg)</option>
-                    <option value="dryness">热力干度</option>
+                    <option value="T">温度 (°C)</option>
+                    <option value="P">压力 (MPa)</option>
+                    <option value="H">焓 (kJ/kg)</option>
+                    <option value="Q">热力干度</option>
                 </select>
                 <label>步数：</label>
-                <input type="number" id="steps1" min="1" max="100" value="10" required onchange="toggleRangeInputs(1)">
+                <input type="number" id="steps1" min="1" max="100" value="10" required onchange="toggleRangeInputs(1)" tabindex="1">
                 <span id="range1">
                     <label>起始值：</label>
-                    <input type="number" id="start1" step="any" required>
+                    <input type="number" id="start1" step="any" required tabindex="2">
                     <label>结束值：</label>
-                    <input type="number" id="end1" step="any" required>
+                    <input type="number" id="end1" step="any" required tabindex="3">
                 </span>
-                <span id="single1" style="display: none;">
+                <span id="single1" style="display:none">
                     <label>值：</label>
-                    <input type="number" id="singleValue1" step="any" required>
+                    <input type="number" id="singleValue1" step="any" required tabindex="4">
                 </span>
             </div>
-            
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom:15px">
                 <label>参数2：</label>
                 <select id="param2">
-                    <option value="pressure" selected>压力 (MPa)</option>
-                    <option value="temperature">温度 (°C)</option>
-                    <option value="enthalpy">焓 (kJ/kg)</option>
-                    <option value="dryness">热力干度</option>
+                    <option value="P" selected>压力 (MPa)</option>
+                    <option value="T">温度 (°C)</option>
+                    <option value="H">焓 (kJ/kg)</option>
+                    <option value="Q">热力干度</option>
                 </select>
                 <label>步数：</label>
-                <input type="number" id="steps2" min="1" max="100" value="1" required onchange="toggleRangeInputs(2)">
+                <input type="number" id="steps2" min="1" max="100" value="1" required onchange="toggleRangeInputs(2)" tabindex="5">
                 <span id="range2">
                     <label>起始值：</label>
-                    <input type="number" id="start2" step="any" required>
+                    <input type="number" id="start2" step="any" required tabindex="6">
                     <label>结束值：</label>
-                    <input type="number" id="end2" step="any" required>
+                    <input type="number" id="end2" step="any" required tabindex="7">
                 </span>
-                <span id="single2" style="display: none;">
+                <span id="single2" style="display:none">
                     <label>值：</label>
-                    <input type="number" id="singleValue2" step="any" required>
+                    <input type="number" id="singleValue2" step="any" required tabindex="8">
                 </span>
             </div>
-            
             <button id="exportButton" onclick="exportData()">导出CSV</button>
             <div id="exportResult"></div>
         </div>
         
-        <div class="status-bar" id="statusBar">
-            就绪 | 等待输入...
+        <div id="unit" class="tab-content">
+            <h3>1. 辐射与剂量</h3>
+            <div class="unit-group">
+                <label>放射性活度</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="Ci" data-factor="3.7e10">居里 (Ci)</option>
+                        <option value="Bq" data-factor="1">贝克勒尔 (Bq)</option>
+                        <option value="mCi" data-factor="3.7e7">毫居里 (mCi)</option>
+                        <option value="μCi" data-factor="3.7e4">微居里 (μCi)</option>
+                        <option value="GBq" data-factor="1e9">吉贝克 (GBq)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="Bq" data-factor="1">贝克勒尔 (Bq)</option>
+                        <option value="Ci" data-factor="3.7e10">居里 (Ci)</option>
+                        <option value="mCi" data-factor="3.7e7">毫居里 (mCi)</option>
+                        <option value="μCi" data-factor="3.7e4">微居里 (μCi)</option>
+                        <option value="GBq" data-factor="1e9">吉贝克 (GBq)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>居里</strong>最初定义为1克镭-226的放射性活度。1 Ci = 3.7 × 10¹⁰ Bq</p>
+            </div>
+            <div class="unit-group">
+                <label>吸收剂量</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="rad" data-factor="0.01">拉德 (rad)</option>
+                        <option value="Gy" data-factor="1">戈瑞 (Gy)</option>
+                        <option value="mGy" data-factor="0.001">毫戈瑞 (mGy)</option>
+                        <option value="cGy" data-factor="0.01">厘戈瑞 (cGy)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="Gy" data-factor="1">戈瑞 (Gy)</option>
+                        <option value="rad" data-factor="0.01">拉德 (rad)</option>
+                        <option value="mGy" data-factor="0.001">毫戈瑞 (mGy)</option>
+                        <option value="cGy" data-factor="0.01">厘戈瑞 (cGy)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>拉德</strong>代表每千克物质吸收0.01焦耳的能量。1 Gy = 100 rad</p>
+            </div>
+            <div class="unit-group">
+                <label>当量剂量</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="rem" data-factor="0.01">雷姆 (rem)</option>
+                        <option value="Sv" data-factor="1">希沃特 (Sv)</option>
+                        <option value="mSv" data-factor="0.001">毫希沃特 (mSv)</option>
+                        <option value="mrem" data-factor="0.00001">毫雷姆 (mrem)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="Sv" data-factor="1">希沃特 (Sv)</option>
+                        <option value="rem" data-factor="0.01">雷姆 (rem)</option>
+                        <option value="mSv" data-factor="0.001">毫希沃特 (mSv)</option>
+                        <option value="mrem" data-factor="0.00001">毫雷姆 (mrem)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>雷姆</strong>考虑了不同类型辐射对生物组织的伤害权重。1 Sv = 100 rem</p>
+            </div>
+            <h3>2. 反应截面</h3>
+            <div class="unit-group">
+                <label>微观截面</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="barn" data-factor="1e-28">靶恩 (barn)</option>
+                        <option value="m2" data-factor="1">平方米 (m²)</option>
+                        <option value="cm2" data-factor="1e-4">平方厘米 (cm²)</option>
+                        <option value="mbarn" data-factor="1e-31">毫靶恩 (mbarn)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="m2" data-factor="1">平方米 (m²)</option>
+                        <option value="barn" data-factor="1e-28">靶恩 (barn)</option>
+                        <option value="cm2" data-factor="1e-4">平方厘米 (cm²)</option>
+                        <option value="mbarn" data-factor="1e-31">毫靶恩 (mbarn)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>靶恩</strong>描述原子核与中子等粒子发生反应的"有效面积"。1 barn = 10⁻²⁸ m²</p>
+            </div>
+            <h3>3. 热工水力与传热</h3>
+            <div class="unit-group">
+                <label>功率/热流率</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="BTU/hr" data-factor="0.293071">英热单位/小时 (BTU/hr)</option>
+                        <option value="W" data-factor="1">瓦特 (W)</option>
+                        <option value="kW" data-factor="1000">千瓦 (kW)</option>
+                        <option value="MW" data-factor="1e6">兆瓦 (MW)</option>
+                        <option value="BTU/s" data-factor="1055.06">英热单位/秒 (BTU/s)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="W" data-factor="1">瓦特 (W)</option>
+                        <option value="BTU/hr" data-factor="0.293071">英热单位/小时 (BTU/hr)</option>
+                        <option value="kW" data-factor="1000">千瓦 (kW)</option>
+                        <option value="MW" data-factor="1e6">兆瓦 (MW)</option>
+                        <option value="BTU/s" data-factor="1055.06">英热单位/秒 (BTU/s)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>BTU</strong>是将1磅水的温度升高1华氏度所需的热量。1 W ≈ 3.412 BTU/hr</p>
+            </div>
+            <div class="unit-group">
+                <label>压力</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="psi" data-factor="6895">磅/平方英寸 (psi)</option>
+                        <option value="Pa" data-factor="1">帕斯卡 (Pa)</option>
+                        <option value="kPa" data-factor="1000">千帕 (kPa)</option>
+                        <option value="MPa" data-factor="1e6">兆帕 (MPa)</option>
+                        <option value="bar" data-factor="1e5">巴 (bar)</option>
+                        <option value="atm" data-factor="101325">标准大气压 (atm)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="Pa" data-factor="1">帕斯卡 (Pa)</option>
+                        <option value="psi" data-factor="6895">磅/平方英寸 (psi)</option>
+                        <option value="kPa" data-factor="1000">千帕 (kPa)</option>
+                        <option value="MPa" data-factor="1e6">兆帕 (MPa)</option>
+                        <option value="bar" data-factor="1e5">巴 (bar)</option>
+                        <option value="atm" data-factor="101325">标准大气压 (atm)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note">反应堆一回路压力在美国设计的核电站中常以<strong>psi</strong>为单位。1 psi ≈ 6895 Pa</p>
+            </div>
+            <div class="unit-group">
+                <label>流量</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="GPM" data-factor="6.309e-5">加仑/分钟 (GPM)</option>
+                        <option value="m3/s" data-factor="1">立方米/秒 (m³/s)</option>
+                        <option value="L/s" data-factor="0.001">升/秒 (L/s)</option>
+                        <option value="m3/h" data-factor="0.000278">立方米/小时 (m³/h)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="m3/s" data-factor="1">立方米/秒 (m³/s)</option>
+                        <option value="GPM" data-factor="6.309e-5">加仑/分钟 (GPM)</option>
+                        <option value="L/s" data-factor="0.001">升/秒 (L/s)</option>
+                        <option value="m3/h" data-factor="0.000278">立方米/小时 (m³/h)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note">冷却剂流量在美国技术规格中常用<strong>GPM</strong>。1 GPM ≈ 6.309 × 10⁻⁵ m³/s</p>
+            </div>
+            <h3>4. 燃料燃耗</h3>
+            <div class="unit-group">
+                <label>燃耗深度</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="MWd/tU" data-factor="8.64e7">兆瓦日/公吨铀 (MWd/tU)</option>
+                        <option value="J/kg" data-factor="1">焦耳/千克 (J/kg)</option>
+                        <option value="GWd/tU" data-factor="8.64e10">吉瓦日/公吨铀 (GWd/tU)</option>
+                        <option value="MJ/kg" data-factor="1e6">兆焦/千克 (MJ/kg)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="J/kg" data-factor="1">焦耳/千克 (J/kg)</option>
+                        <option value="MWd/tU" data-factor="8.64e7">兆瓦日/公吨铀 (MWd/tU)</option>
+                        <option value="GWd/tU" data-factor="8.64e10">吉瓦日/公吨铀 (GWd/tU)</option>
+                        <option value="MJ/kg" data-factor="1e6">兆焦/千克 (MJ/kg)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note">衡量从单位质量核燃料中提取能量总量的行业标准单位。1 MWd/tU = 8.64 × 10⁷ J/kg</p>
+            </div>
+            <h3>5. 其他工程单位</h3>
+            <div class="unit-group">
+                <label>长度/尺寸</label>
+                <div class="unit-converter">
+                    <select class="unit-select">
+                        <option value="ft" data-factor="0.3048">英尺 (ft)</option>
+                        <option value="in" data-factor="0.0254">英寸 (in)</option>
+                        <option value="mil" data-factor="0.0000254">密耳 (mil)</option>
+                        <option value="m" data-factor="1">米 (m)</option>
+                        <option value="cm" data-factor="0.01">厘米 (cm)</option>
+                        <option value="mm" data-factor="0.001">毫米 (mm)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                    <span>↔</span>
+                    <select class="unit-select">
+                        <option value="m" data-factor="1">米 (m)</option>
+                        <option value="ft" data-factor="0.3048">英尺 (ft)</option>
+                        <option value="in" data-factor="0.0254">英寸 (in)</option>
+                        <option value="mil" data-factor="0.0000254">密耳 (mil)</option>
+                        <option value="cm" data-factor="0.01">厘米 (cm)</option>
+                        <option value="mm" data-factor="0.001">毫米 (mm)</option>
+                    </select>
+                    <input type="number" class="unit-input" step="any" placeholder="输入数值">
+                </div>
+                <p class="unit-note"><strong>Mil</strong>即千分之一英寸，常用于描述包壳厚度。1 mil = 0.0254 mm</p>
+            </div>
         </div>
+        
+        <div class="status-bar" id="statusBar">初始化...</div>
     </div>
 
-    <script>
-        // =================================================================
-        // !! 重要配置 !!
-        // 请将下面的地址替换为您的真实函数URL
-        // =================================================================
-        const API_BASE_URL = 'https://water-func-iqweupkgxi.cn-shanghai.fcapp.run'; 
-        // 例如: 'https://water-func-iqweupkgxi.cn-shanghai.fcapp.run'
-        // =================================================================
-
-        const statusBar = document.getElementById('statusBar');
-        const calculateButton = document.getElementById('calculateButton');
-        let lastCalculationData = null; // 存储最后一次计算的数据
-
-        function updateStatus(message, isError = false) {
-            statusBar.textContent = message;
-            statusBar.style.color = isError ? '#ff0000' : '#000080';
-        }
+    <script type="module">
+        const API_BASE_URL='https://water-func-iqweupkgxi.cn-shanghai.fcapp.run',FLUID='Water';
+        const statusBar=document.getElementById('statusBar'),calculateButton=document.getElementById('calculateButton'),exportButton=document.getElementById('exportButton'),calculateResultDiv=document.getElementById('calculateResult'),exportResultDiv=document.getElementById('exportResult');
+        let coolprop=null,calculationMode='cloud';
         
-        function switchTab(event, tabName) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        document.getElementById('calculateForm').addEventListener('submit', function(e) {
-            // 1. 阻止表单的默认提交行为
-            e.preventDefault();
-            
-            const resultDiv = document.getElementById('calculateResult');
-            resultDiv.innerHTML = ''; // 清空上次结果
-            updateStatus('正在计算...');
-            calculateButton.disabled = true; // 禁用按钮防止重复点击
-
-            // 2. 收集表单数据
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-
-            // 3. 使用 Fetch API 发送异步 POST 请求
-            fetch(`${API_BASE_URL}/calculate`, {
+        window.switchTab=(e,t)=>{document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(t).classList.add('active');e.currentTarget.classList.add('active')};
+        window.toggleRangeInputs=n=>{const s=parseInt(document.getElementById(`steps${n}`).value)===1;document.getElementById(`range${n}`).style.display=s?'none':'inline';document.getElementById(`single${n}`).style.display=s?'inline':'none'};
+        
+        const propertyMap={T:{name:'温度',unit:'°C',toSI:v=>v+273.15,fromSI:v=>v-273.15,apiName:'temperature'},P:{name:'压力',unit:'MPa',toSI:v=>v*1e6,fromSI:v=>v/1e6,apiName:'pressure'},H:{name:'焓',unit:'kJ/kg',toSI:v=>v*1000,fromSI:v=>v/1000,apiName:'enthalpy'},S:{name:'熵',unit:'kJ/(kg·K)',fromSI:v=>v/1000,apiName:'entropy'},D:{name:'密度',unit:'kg/m³',fromSI:v=>v,apiName:'density'},Q:{name:'热力干度',unit:'',toSI:v=>v,fromSI:v=>v,apiName:'quality'},C:{name:'比热容',unit:'kJ/(kg·K)',fromSI:v=>v/1000,apiName:'specific_heat'},V:{name:'动力粘度',unit:'Pa·s',fromSI:v=>v,apiName:'viscosity'},L:{name:'导热系数',unit:'W/(m·K)',fromSI:v=>v,apiName:'thermal_conductivity'},I:{name:'表面张力',unit:'N/m',fromSI:v=>v,apiName:'surface_tension'},A:{name:'声速',unit:'m/s',fromSI:v=>v,apiName:'speed_of_sound'},TSAT:{name:'饱和温度',unit:'°C',fromSI:v=>v-273.15,apiName:'tsat'},PSAT:{name:'饱和压力',unit:'MPa',fromSI:v=>v/1e6,apiName:'psat'},HF:{name:'饱和液体焓',unit:'kJ/kg',fromSI:v=>v/1000,apiName:'hf'},HG:{name:'饱和蒸汽焓',unit:'kJ/kg',fromSI:v=>v/1000,apiName:'hg'},HFG:{name:'汽化潜热',unit:'kJ/kg',fromSI:v=>v/1000,apiName:'hfg'}};
+        
+        async function calculateViaAPI(calcData) {
+            const apiRequest = {
+                input1_type: propertyMap[calcData.input1_type].apiName,
+                input1_value: calcData.input1_value,
+                input2_type: propertyMap[calcData.input2_type].apiName,
+                input2_value: calcData.input2_value,
+            };
+            const response = await fetch(`${API_BASE_URL}/calculate`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data) // 将JS对象转为JSON字符串
-            })
-            .then(response => {
-                // 4. 处理HTTP响应
-                if (!response.ok) { // 如果状态码不是 2xx (如 404, 500)
-                    // 尝试解析错误体，如果失败则给一个通用错误
-                    return response.json().then(err => { 
-                        throw new Error(err.error || `服务器错误 (状态: ${response.status})`) 
-                    });
-                }
-                return response.json(); // 解析成功的响应体
-            })
-            .then(responseData => {
-                // 5. 处理从响应体中解析出的JSON数据
-                // API返回格式: [status_code, headers, body_string]
-                let data;
-                if (Array.isArray(responseData)) {
-                    // 如果是数组格式，解析第三个元素(body字符串)
-                    const bodyString = responseData[2];
-                    data = JSON.parse(bodyString);
-                } else {
-                    // 如果是直接的对象格式
-                    data = responseData;
-                }
-                
-                if (data.success) {
-                    const props = data.properties;
-                    // 动态生成结果HTML，而不是写死属性
-                    let html = '<div class="result"><h3>水物性参数</h3><div class="properties-grid">';
-                    
-                    // 属性映射：英文名 -> 中文名、单位、转换函数
-                    const propertyMap = {
-                        temperature: { name: '温度', unit: '°C', convert: (v) => v - 273.15 },
-                        pressure: { name: '压力', unit: 'MPa', convert: (v) => v / 1000000 },
-                        enthalpy: { name: '焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
-                        entropy: { name: '熵', unit: 'kJ/(kg·K)', convert: (v) => v / 1000 },
-                        density: { name: '密度', unit: 'kg/m³', convert: (v) => v },
-                        quality: { name: '热力干度', unit: '', convert: (v) => v },
-                        specific_heat: { name: '比热容', unit: 'kJ/(kg·K)', convert: (v) => v / 1000 },
-                        thermal_conductivity: { name: '导热系数', unit: 'W/(m·K)', convert: (v) => v },
-                        viscosity: { name: '动力粘度', unit: 'Pa·s', convert: (v) => v },
-                        surface_tension: { name: '表面张力', unit: 'N/m', convert: (v) => v },
-                        speed_of_sound: { name: '声速', unit: 'm/s', convert: (v) => v },
-                        // 饱和数据
-                        saturation_data: {
-                            tsat: { name: '饱和温度', unit: '°C', convert: (v) => v - 273.15 },
-                            psat: { name: '饱和压力', unit: 'MPa', convert: (v) => v / 1000000 },
-                            hf: { name: '饱和液体焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
-                            hg: { name: '饱和蒸汽焓', unit: 'kJ/kg', convert: (v) => v / 1000 },
-                            hfg: { name: '汽化潜热', unit: 'kJ/kg', convert: (v) => v / 1000 }
-                        }
-                    };
-                    
-                    // 处理主要属性
-                    for (const propKey in props) {
-                        if (Object.prototype.hasOwnProperty.call(props, propKey) && propKey !== 'saturation_data') {
-                            const value = props[propKey];
-                            const propInfo = propertyMap[propKey];
-                            
-                            if (propInfo) {
-                                const convertedValue = propInfo.convert(value);
-                                const displayValue = typeof convertedValue === 'number' ? 
-                                    convertedValue.toPrecision(8) : convertedValue;
-                                const unitText = propInfo.unit ? ` ${propInfo.unit}` : '';
-                                
-                                html += `<div class="property">
-                                            <div class="property-name">${propInfo.name}</div>
-                                            <div class="property-value">${displayValue}${unitText}</div>
-                                         </div>`;
-                            }
-                        }
-                    }
-                    
-                    // 处理饱和数据
-                    if (props.saturation_data) {
-                        html += '<div class="property" style="grid-column: 1 / -1;"><div class="property-name">饱和数据</div></div>';
-                        for (const satKey in props.saturation_data) {
-                            if (Object.prototype.hasOwnProperty.call(props.saturation_data, satKey)) {
-                                const value = props.saturation_data[satKey];
-                                const satInfo = propertyMap.saturation_data[satKey];
-                                
-                                if (satInfo) {
-                                    const convertedValue = satInfo.convert(value);
-                                    const displayValue = typeof convertedValue === 'number' ? 
-                                        convertedValue.toPrecision(8) : convertedValue;
-                                    const unitText = satInfo.unit ? ` ${satInfo.unit}` : '';
-                                    
-                                    html += `<div class="property">
-                                                <div class="property-name">${satInfo.name}</div>
-                                                <div class="property-value">${displayValue}${unitText}</div>
-                                             </div>`;
-                                }
-                            }
-                        }
-                    }
-                    
-                    html += '</div></div>';
-                    resultDiv.innerHTML = html;
-                    updateStatus('计算完成');
-                    
-                    // 保存计算结果用于导出
-                    lastCalculationData = {
-                        inputs: data,
-                        properties: props,
-                        timestamp: new Date().toISOString()
-                    };
-                } else {
-                    // 如果 success: false
-                    throw new Error(data.error || '计算失败');
-                }
-            })
-            .catch(error => {
-                // 6. 统一捕获并显示任何环节发生的错误
-                let errorMessage = error.message;
-                
-                // 如果是CORS或网络错误，提供更友好的提示
-                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                    errorMessage = '无法连接到服务器。请检查：<br>1. API服务是否正常运行<br>2. 网络连接是否正常<br>3. 是否存在CORS跨域问题';
-                } else if (error.message.includes('CORS')) {
-                    errorMessage = '跨域请求被拒绝。请联系服务器管理员配置CORS策略。';
-                }
-                
-                resultDiv.innerHTML = `<div class="result error"><h3>错误</h3><p>${errorMessage}</p></div>`;
-                updateStatus(`错误: ${error.message}`, true);
-            })
-            .finally(() => {
-                // 7. 无论成功或失败，最后都重新启用按钮
-                calculateButton.disabled = false;
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(apiRequest)
             });
-        });
-        
-        // 切换范围输入显示
-        function toggleRangeInputs(paramNum) {
-            const steps = document.getElementById(`steps${paramNum}`).value;
-            const rangeSpan = document.getElementById(`range${paramNum}`);
-            const singleSpan = document.getElementById(`single${paramNum}`);
-            
-            if (parseInt(steps) === 1) {
-                rangeSpan.style.display = 'none';
-                singleSpan.style.display = 'inline';
-            } else {
-                rangeSpan.style.display = 'inline';
-                singleSpan.style.display = 'none';
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error || `服务器错误 (状态: ${response.status})`);
             }
+            const responseData = await response.json();
+            const data = Array.isArray(responseData) ? JSON.parse(responseData[2]) : responseData;
+
+            if (!data.success) throw new Error(data.error || '计算失败');
+            
+            // Convert API response back to local keys
+            const props = {};
+            for (const key in propertyMap) {
+                const apiName = propertyMap[key].apiName;
+                if (data.properties[apiName] !== undefined && data.properties[apiName] !== "N/A") {
+                    props[key] = data.properties[apiName];
+                }
+            }
+            
+            // Handle saturation data
+            if (data.properties.saturation_data) {
+                const satData = data.properties.saturation_data;
+                if (satData.tsat !== undefined) props.TSAT = satData.tsat;
+                if (satData.psat !== undefined) props.PSAT = satData.psat;
+                if (satData.hf !== undefined) props.HF = satData.hf;
+                if (satData.hg !== undefined) props.HG = satData.hg;
+                if (satData.hfg !== undefined) props.HFG = satData.hfg;
+            }
+            
+            return { success: true, properties: props };
         }
         
-        // 页面加载时初始化显示状态
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleRangeInputs(1);
-            toggleRangeInputs(2);
-        });
+        function calculateViaLocal(d){const{input1_type:t1,input1_value:v1,input2_type:t2,input2_value:v2=0}=d;try{const val1=propertyMap[t1].toSI(v1),val2=propertyMap[t2].toSI(v2),props={};Object.keys(propertyMap).forEach(k=>{if(['TSAT','PSAT','HF','HG','HFG'].includes(k)||k==='Q'&&(t1==='Q'||t2==='Q')||k==='I')return;try{const r=coolprop.PropsSI(k,t1,val1,t2,val2,FLUID);if(isFinite(r))props[k]=r}catch(e){}});if(t1==='Q')props.Q=v1;if(t2==='Q')props.Q=v2;const p=props.P||(t1==='P'?val1:t2==='P'?val2:null),temp=props.T||(t1==='T'?val1:t2==='T'?val2:null);try{if(temp&&temp<647.067){const st=coolprop.PropsSI('I','T',temp,'Q',0,FLUID);if(isFinite(st))props.I=st}}catch(e){}try{if(p&&p<22064000){const tsat=coolprop.PropsSI('T','P',p,'Q',0,FLUID),hf=coolprop.PropsSI('H','P',p,'Q',0,FLUID),hg=coolprop.PropsSI('H','P',p,'Q',1,FLUID),psat=coolprop.PropsSI('P','T',temp,'Q',0,FLUID);if(isFinite(tsat))props.TSAT=tsat;if(isFinite(hf))props.HF=hf;if(isFinite(hg))props.HG=hg;if(isFinite(hf)&&isFinite(hg))props.HFG=hg-hf;if(isFinite(psat))props.PSAT=psat}}catch(e){}return{success:true,properties:props}}catch(e){return{success:false,error:e.message}}}
         
-        // 导出数据函数
-        async function exportData() {
-            const exportResult = document.getElementById('exportResult');
-            const exportButton = document.getElementById('exportButton');
-            
-            // 收集表单数据
-            const param1 = document.getElementById('param1').value;
-            const steps1 = document.getElementById('steps1').value;
-            const param2 = document.getElementById('param2').value;
-            const steps2 = document.getElementById('steps2').value;
-            
-            // 根据步数决定是否需要起始值和结束值
-            let start1, end1, start2, end2;
-            
-            if (parseInt(steps1) === 1) {
-                start1 = document.getElementById('singleValue1').value;
-                if (!start1) {
-                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数1的值</p></div>`;
-                    return;
-                }
-                end1 = start1; // 步数为1时，结束值等于起始值
-            } else {
-                start1 = document.getElementById('start1').value;
-                end1 = document.getElementById('end1').value;
-                if (!start1 || !end1) {
-                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数1的起始值和结束值</p></div>`;
-                    return;
-                }
+        document.getElementById('calculateForm').addEventListener('submit',async function(e){e.preventDefault();calculateResultDiv.innerHTML='';statusBar.textContent=`正在计算 (${calculationMode==='local'?'本地':'云端'})...`;statusBar.style.color='#000080';calculateButton.disabled=true;const data=new FormData(this),calcData={input1_type:data.get('input1_type'),input1_value:parseFloat(data.get('input1_value')),input2_type:data.get('input2_type'),input2_value:parseFloat(data.get('input2_value'))};try{const result=calculationMode==='local'?calculateViaLocal(calcData):await calculateViaAPI(calcData);if(result.success){displayResults(result.properties);statusBar.textContent='计算完成'}else throw new Error(result.error)}catch(error){calculateResultDiv.innerHTML=`<div class="result error"><h3>错误</h3><p>${error.message}</p></div>`;statusBar.textContent=`计算失败: ${error.message}`;statusBar.style.color='#f00'}finally{calculateButton.disabled=false}});
+        
+        window.exportData=async()=>{exportResultDiv.innerHTML='';statusBar.textContent=`正在生成CSV (${calculationMode==='local'?'本地':'云端'})...`;statusBar.style.color='#000080';exportButton.disabled=true;try{const p1=document.getElementById('param1').value,s1=parseInt(document.getElementById('steps1').value),p2=document.getElementById('param2').value,s2=parseInt(document.getElementById('steps2').value);let st1,e1,st2,e2;if(s1===1)st1=e1=parseFloat(document.getElementById('singleValue1').value);else{st1=parseFloat(document.getElementById('start1').value);e1=parseFloat(document.getElementById('end1').value)}if(s2===1)st2=e2=parseFloat(document.getElementById('singleValue2').value);else{st2=parseFloat(document.getElementById('start2').value);e2=parseFloat(document.getElementById('end2').value)}if(isNaN(st1)||isNaN(e1)||isNaN(st2)||isNaN(e2))throw new Error('所有输入值必须是数字。');const csvContent=calculationMode==='local'?generateCsvLocal(p1,st1,e1,s1,p2,st2,e2,s2):await generateCsvAPI(p1,st1,e1,s1,p2,st2,e2,s2);downloadCsv(csvContent);exportResultDiv.innerHTML=`<div class="result"><h3>导出成功</h3><p>已生成 ${s1*s2} 个数据点的CSV文件</p></div>`;statusBar.textContent='导出完成'}catch(error){exportResultDiv.innerHTML=`<div class="result error"><h3>导出失败</h3><p>${error.message}</p></div>`;statusBar.textContent=`导出失败: ${error.message}`;statusBar.style.color='#f00'}finally{exportButton.disabled=false}};
+        
+        function displayResults(props){let html='<div class="result"><h3>水物性参数</h3><div class="properties-grid">';const mainProps=['T','P','H','S','D','Q','C','V','L','I','A'];for(const key of mainProps){if(props[key]===undefined)continue;const propInfo=propertyMap[key],displayValue=propInfo.fromSI(props[key]),valueStr=(typeof displayValue==='number'&&key!=='Q')?displayValue.toPrecision(8):(key==='Q'&&displayValue>=0&&displayValue<=1)?displayValue.toFixed(4):(key==='I'&&displayValue>0)?displayValue.toPrecision(6):'N/A';if(valueStr==='N/A')continue;html+=`<div class="property"><div class="property-name">${propInfo.name}</div><div class="property-value">${valueStr} ${propInfo.unit}</div></div>`}html+='</div>';const satProps=['TSAT','PSAT','HF','HG','HFG'],hasSatData=satProps.some(key=>props[key]!==undefined);if(hasSatData){html+='<h3>饱和物性参数</h3><div class="properties-grid">';for(const key of satProps){if(props[key]===undefined)continue;const propInfo=propertyMap[key],displayValue=propInfo.fromSI(props[key]),valueStr=(typeof displayValue==='number')?displayValue.toPrecision(8):'N/A';if(valueStr==='N/A')continue;html+=`<div class="property"><div class="property-name">${propInfo.name}</div><div class="property-value">${valueStr} ${propInfo.unit}</div></div>`}html+='</div>'}html+='</div>';calculateResultDiv.innerHTML=html}
+        
+        function generateCsvLocal(p1,st1,e1,s1,p2,st2,e2,s2){const v1=Array.from({length:s1},(i,x)=>st1+(e1-st1)*x/(s1>1?s1-1:1)),v2=Array.from({length:s2},(i,x)=>st2+(e2-st2)*x/(s2>1?s2-1:1)),headers=[propertyMap[p1].name,propertyMap[p2].name,...Object.values(propertyMap).map(m=>m.name)];let csv=headers.join(',')+'\n';for(const val1 of v1)for(const val2 of v2){const result=calculateViaLocal({input1_type:p1,input1_value:val1,input2_type:p2,input2_value:val2}),row=[val1,val2];if(result.success)for(const key in propertyMap)row.push(result.properties[key]!==undefined?propertyMap[key].fromSI(result.properties[key]):'');else row.push(...Array(Object.keys(propertyMap).length).fill('Error'));csv+=row.join(',')+'\n'}return csv}
+        
+        async function generateCsvAPI(p1_type, p1_start, p1_end, p1_steps, p2_type, p2_start, p2_end, p2_steps) {
+            const requestData = {
+                param1: propertyMap[p1_type].apiName,
+                start1: p1_start, end1: p1_end, steps1: p1_steps,
+                param2: propertyMap[p2_type].apiName,
+                start2: p2_start, end2: p2_end, steps2: p2_steps
+            };
+            const response = await fetch(`${API_BASE_URL}/export_csv`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `服务器错误 (状态: ${response.status})`);
             }
-            
-            if (parseInt(steps2) === 1) {
-                start2 = document.getElementById('singleValue2').value;
-                if (!start2) {
-                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数2的值</p></div>`;
-                    return;
-                }
-                end2 = start2; // 步数为1时，结束值等于起始值
-            } else {
-                start2 = document.getElementById('start2').value;
-                end2 = document.getElementById('end2').value;
-                if (!start2 || !end2) {
-                    exportResult.innerHTML = `<div class="result error"><h3>错误</h3><p>请填写参数2的起始值和结束值</p></div>`;
-                    return;
-                }
-            }
-            
-            exportButton.disabled = true;
-            updateStatus('正在生成CSV文件...');
-            
-            try {
-                const requestData = {
-                    param1: param1,
-                    start1: parseFloat(start1),
-                    end1: parseFloat(end1),
-                    steps1: parseInt(steps1),
-                    param2: param2,
-                    start2: parseFloat(start2),
-                    end2: parseFloat(end2),
-                    steps2: parseInt(steps2)
-                };
-                
-                const response = await fetch(`${API_BASE_URL}/export_csv`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData)
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `服务器错误 (状态: ${response.status})`);
-                }
-                
-                // 处理CSV文件下载
-                const contentDisposition = response.headers.get('Content-Disposition');
-                const filename = contentDisposition ? 
-                    contentDisposition.split('filename=')[1].replace(/"/g, '') : 
-                    'water_properties.csv';
-                
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                
-                // 计算总数据量
-                const totalPoints = parseInt(steps1) * parseInt(steps2);
-                exportResult.innerHTML = `<div class="result"><h3>导出成功</h3><p>已生成 ${totalPoints} 个数据点的CSV文件</p></div>`;
-                updateStatus('导出完成');
-                
-            } catch (error) {
-                exportResult.innerHTML = `<div class="result error"><h3>导出失败</h3><p>${error.message}</p></div>`;
-                updateStatus(`导出失败: ${error.message}`, true);
-            } finally {
-                exportButton.disabled = false;
-            }
+            return await response.text();
         }
         
-          
+        function downloadCsv(content){const blob=new Blob([content],{type:'text/csv;charset=utf-8;'}),link=document.createElement("a");link.href=URL.createObjectURL(blob);link.download=`water_properties_${new Date().toISOString().slice(0,10)}.csv`;document.body.appendChild(link);link.click();document.body.removeChild(link)}
+        
+        function setupUnitConverters(){document.querySelectorAll('.unit-converter').forEach(converter=>{const inputs=converter.querySelectorAll('.unit-input'),selects=converter.querySelectorAll('.unit-select');inputs.forEach((input,index)=>{input.addEventListener('input',()=>{if(input.value!==''){const fromSelect=selects[index],toSelect=selects[1-index],otherInput=inputs[1-index],fromFactor=parseFloat(fromSelect.selectedOptions[0].dataset.factor),toFactor=parseFloat(toSelect.selectedOptions[0].dataset.factor),inputValue=parseFloat(input.value);if(!isNaN(inputValue)){const baseValue=inputValue*fromFactor,convertedValue=baseValue/toFactor;otherInput.value=convertedValue.toPrecision(6)}}else inputs[1-index].value=''})});selects.forEach((select,index)=>{select.addEventListener('change',()=>{const activeInput=inputs[index];if(activeInput.value!=='')activeInput.dispatchEvent(new Event('input'))})})})}
+        
+        document.addEventListener('DOMContentLoaded',()=>{toggleRangeInputs(1);toggleRangeInputs(2);setupUnitConverters();statusBar.textContent='目前状态：云端计算。正在后台加载本地模块...';import('/coolprop.js').then(Module=>{Module.default({locateFile:(path,prefix)=>path.endsWith('.wasm')?'/coolprop.wasm':prefix+path}).then(instance=>{coolprop=instance;calculationMode='local';statusBar.textContent='本地计算模块已加载。'}).catch(e=>{console.error("WASM failed:",e);statusBar.textContent='本地模块加载失败，将继续使用云端计算。';statusBar.style.color='#f00'})}).catch(e=>{console.error("JS Module load failed:",e);statusBar.textContent='无法加载本地计算脚本，将继续使用云端计算。';statusBar.style.color='#f00'})});
     </script>
 </body>
 </html>
